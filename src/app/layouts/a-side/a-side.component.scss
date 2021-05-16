@@ -1,12 +1,27 @@
 aside {
+  position: sticky;
+  top: 0;
+  box-sizing: border-box;
   width: 15vw;
   height: 100vh;
   padding: 1%;
   display: flex;
   align-items: center;
   flex-direction: column;
-  box-shadow: 9px 0px 11px -6px rgba(0, 0, 0, 0.75);
-//   .aside__categories{
+  background-color: rgb(243, 243, 243);
+  box-shadow: 9px 0 11px -6px rgba(0, 0, 0, 0.75);
+}
 
-//   }
+.aside__categories {
+  list-style: none;
+
+  li {
+    cursor: pointer;
+    height: fit-content;
+    width: fit-content;
+    margin-top: 2vh;
+    font-size: 1.5vw;
+    font-weight: 500;
+    font-family: anton, serif;
+  }
 }
