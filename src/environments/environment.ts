@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl:'http://www.omdbapi.com/?',
-  apiKey:'apikey=fe04dfcd'
+  apiUrl: 'https://api.themoviedb.org/3/',
+  apiKey: 'api_key=6dbb93f19cc60f24db85344100104579',
 };
 
 /*
