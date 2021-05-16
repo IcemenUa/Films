@@ -14,14 +14,14 @@ aside {
 
 .aside__categories {
   list-style: none;
-
+margin-top: 5vh;
   li {
     cursor: pointer;
     height: fit-content;
     width: fit-content;
     margin-top: 2vh;
     font-size: 1.5vw;
-    font-weight: 500;
-    font-family: anton, serif;
+    font-weight: 700;
+    font-family:Arial, Helvetica, sans-serif ;
   }
 }
