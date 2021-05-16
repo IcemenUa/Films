@@ -1,9 +1,11 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ApiService } from '../../shared/services/api.service';
-import { Films, FilmsApiResponse } from '../../shared/interfaces/film-model';
+import { Film, FilmsApiResponse } from '../../shared/interfaces/film-model';
 import { FormControl } from '@angular/forms';
 import { debounceTime, take } from 'rxjs/operators';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+import { FilmsService } from '../../shared/services/films.service';
+import { log } from 'util';
 @Component({
   selector: 'app-films',
   templateUrl: './films.component.html',
@@ -11,13 +13,15 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 })
 export class FilmsComponent implements OnInit {
   searchControl = new FormControl('');
-  films$: Films[];
+  films$: Film[];
   currentPage: number;
+  currentFilm: Film;
+  currentFilmIndex: number;
   totalPages: number;
-  currentFilm: Films;
   searchStatus = false;
+
   modalRef: BsModalRef;
-  constructor(public filmApi: ApiService, private modalService: BsModalService) {}
+  constructor(public filmsService: FilmsService, public filmApi: ApiService, private modalService: BsModalService) {}
 
   ngOnInit(): void {
     this.getPopularFilms();
@@ -31,10 +35,7 @@ export class FilmsComponent implements OnInit {
   changePageControl(action: string): void {
     action === 'next' && this.currentPage !== this.totalPages ? this.changePage(true) : this.changePage(false);
   }
-  getFilmDetail(fimID: number): void {
-    this.currentFilm = this.films$[fimID];
-  }
-  changePage(status: boolean): void {
+  private changePage(status: boolean): void {
     status && this.currentPage < this.totalPages
       ? this.currentPage++
       : this.currentPage > 1
@@ -51,17 +52,32 @@ export class FilmsComponent implements OnInit {
       .getPopularFilms(page)
       .pipe(take(1))
       .subscribe((res: FilmsApiResponse) => {
-        this.films$ = res.results;
+        this.films$ = res.results.map((film: Film): Film => {
+          return { ...film, isWatched: this.filmsService.checkFilmIsWatched(film) };
+        });
         this.totalPages = res.total_pages;
         this.currentPage = res.page;
       });
   }
-
-  searchFilm(filmName, page = 1): void {
-    this.filmApi.searchFilm(filmName, page).subscribe((res) => {
-      this.films$ = res.results;
+  private searchFilm(filmName, page = 1): void {
+    this.filmApi.searchFilm(filmName, page).subscribe((res: FilmsApiResponse) => {
+      this.films$ = res.results.map((film: Film): Film => {
+        return { ...film, isWatched: this.filmsService.checkFilmIsWatched(film) };
+      });
       this.totalPages = res.total_pages;
     });
+  }
+
+  getFilmDetail(filmID: number): void {
+    this.currentFilm = this.films$[filmID];
+    this.currentFilmIndex = filmID;
+  }
+
+  watchedFilmsControl(action: string): void {
+    action === 'add'
+      ? (this.films$[this.currentFilmIndex].isWatched = true)
+      : (this.films$[this.currentFilmIndex].isWatched = false);
+    this.filmsService.changeWatchedList(this.currentFilm, action);
   }
 
   // tslint:disable-next-line:typedef

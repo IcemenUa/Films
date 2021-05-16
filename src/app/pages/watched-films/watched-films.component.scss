@@ -1,0 +1,20 @@
+.films-container {
+  box-sizing: border-box;
+  //   background-color: yellow;
+  width: 85vw;
+
+  display: grid;
+  grid-template-columns: 19vw 19vw 19vw 19vw;
+  grid-auto-rows: 25vw;
+  grid-gap: 2vw;
+  justify-content: center;
+  padding: 1%;
+}
+
+.film-card {
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 4%;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.35);
+}
+

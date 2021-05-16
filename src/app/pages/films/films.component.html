@@ -8,6 +8,7 @@
       style="width: 100%; height: 100%"
       (click)="getFilmDetail(i)"
       alt="img"
+      [ngClass]="{'watched-film':film.isWatched}"
     />
   </div>
 </div>
@@ -59,7 +60,22 @@
       <span>{{ currentFilm.overview }}</span>
     </div>
     <div class="d-grid gap-2 d-md-block mt-2">
-      <button type="button" class="btn btn-success mr-2">Add To Watched</button>
+      <button
+        type="button"
+        class="btn btn-success mr-2"
+        (click)="watchedFilmsControl('add'); modalRef.hide()"
+        *ngIf="!currentFilm.isWatched"
+      >
+        Add To Watched
+      </button>
+      <button
+        type="button"
+        class="btn btn-success mr-2"
+        (click)="watchedFilmsControl('delete'); modalRef.hide()"
+        *ngIf="currentFilm.isWatched"
+      >
+        Delete From Watched
+      </button>
       <button type="button" class="btn btn-danger" (click)="modalRef.hide()">Cancel</button>
     </div>
   </div>
